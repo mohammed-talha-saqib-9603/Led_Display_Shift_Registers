@@ -1,14 +1,3 @@
-/* 
- display refreshes independent of loop function you can use long delays.
- and these long delays won't blank display
- However, scrolling and animations works in loop.
- This Scroll function is designed for just upto 46 characters in string. just for basic library.
- 
-*/
- 
-
-
-
 #include <led_matrix_8x8_lib.h>
 #include<TimerOne.h>  //download this library because this library helps for internal interrupts.
 const int dataPin=6;
@@ -27,13 +16,10 @@ void setup() {
 }
 
 void loop() {
-  if(millis()-time1<=5000){
-    scroll("HELLO",2);
-    time2=millis();
-  }else{
-    scroll("MY NAME IS TALHA",3);
-    if(millis()-time2>=10000){
-      time1=millis();
-    }
-  }
+  displayChar('A');
+  delay(2000);
+  displayEmoji(EMOJI_HAPPY);
+  delay(2000);
+  display(EMOJI_HEART);
+  delay(2000);
 }
