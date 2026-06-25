@@ -5,9 +5,9 @@
 void display_begin(int dIn,int cPin,int lPin);
 void scanner();
 void displayChar (char ch);
-void scroll(char str[], int x_shift);
+int scroll(char str[], int x_shift);
 void displayEmoji(const uint8_t *str);
-void displayImage(const uint8_t *str)
+void displayImage(const uint8_t *str);
 
 static const uint8_t font5x8[127][8] PROGMEM = {
   { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, // 0: unused (control code)

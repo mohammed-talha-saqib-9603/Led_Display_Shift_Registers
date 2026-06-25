@@ -27,7 +27,7 @@ void scanner(){
 void displayChar (char ch){
     uint8_t i=(uint8_t)ch;
     noInterrupts();
-    if(i>127)
+    if(i>=127)
         for(uint8_t j=0;j<8;j++)
             img[j]=0x00;
     else{
@@ -36,7 +36,10 @@ void displayChar (char ch){
     interrupts(); 
 }
 
-void scroll(char str[], int x_shift){
+int scroll(char str[], int x_shift){
+  if(strlen(str)>46){
+    return 2;
+  }
   static unsigned long t1=0;
   uint8_t n=strlen(str);
   static uint8_t j=0;
@@ -53,13 +56,13 @@ void scroll(char str[], int x_shift){
       strcat(temp,"   ");
       uint8_t L1[8],L2[8];
       if(x_shift < 1 || x_shift > 7){
-        return;
+        return 0;
       }
-      memcpy_P(L1,font5x8[(uint8_t)temp[j]>127 ? 0 :(uint8_t)temp[j] ],8);
-      memcpy_P(L2,font5x8[(uint8_t)temp[j+1]>127 ? 0 :(uint8_t)temp[j+1] ],8);
+      memcpy_P(L1,font5x8[(uint8_t)temp[j]>=127 ? 0 :(uint8_t)temp[j] ],8);
+      memcpy_P(L2,font5x8[(uint8_t)temp[j+1]>=127 ? 0 :(uint8_t)temp[j+1] ],8);
       noInterrupts();
       for(int r=0;r<8;r++){
-        img[r]=(L1[r]<<x_shift) + (L2[r]>>(8-x_shift));
+        img[r]=((L1[r]<<pos) | (L2[r]>>(8-pos)));
       }
       interrupts();
       pos+=x_shift;
@@ -72,6 +75,7 @@ void scroll(char str[], int x_shift){
       }
       t1=millis();
     }
+  return 1;
 }
 void displayEmoji(const uint8_t *str){
   noInterrupts();
